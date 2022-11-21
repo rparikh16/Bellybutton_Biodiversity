@@ -1,7 +1,7 @@
 function init() {
     var selector = d3.select("#selDataset");
   
-    d3.json("samples.json").then((data) => {
+    d3.json("static/data/samples.json").then((data) => {
       console.log(data);
       var sampleNames = data.names;
       sampleNames.forEach((sample) => {
@@ -10,16 +10,18 @@ function init() {
           .text(sample)
           .property("value", sample);
       });
-    })}
-function optionChanged(newSample) {
-    console.log(newSample);
-}
+      var firstSample = sampleNames[0];
+      buildCharts(firstSample);
+      buildMetadata(firstSample);
+    });
+  }
+  init();
 function optionChanged(newSample) {
     buildMetadata(newSample);
     buildCharts(newSample);
   }
 function buildMetadata(sample) {
-  d3.json("samples.json").then((data) => {
+  d3.json("static/data/samples.json").then((data) => {
     var metadata = data.metadata;
     // Filter the data for the object with the desired sample number
     var resultArray = metadata.filter(sampleObj => sampleObj.id == sample);
@@ -42,7 +44,7 @@ function buildMetadata(sample) {
 // Bar and Bubble charts
 function buildCharts(sample) {
   // 2. Use d3.json to load and retrieve the samples.json file 
-  d3.json("samples.json").then((data) => {
+  d3.json("static/data/samples.json").then((data) => {
     // 3. Create a variable that holds the samples array. 
     var samples = data.samples;
     var metadata = data.metadata;
@@ -137,4 +139,3 @@ function buildCharts(sample) {
     Plotly.newPlot("gauge", gaugeData, gaugeLayout);
   });
 }
-init();
